@@ -1,0 +1,28 @@
+<div class="container mt-4">
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="challenge && !isLoading" class="card shadow-lg">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h4>{{ challenge.title }}</h4>
+      <small>Created by: {{ challenge.createdBy }}</small>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        <strong>Description:</strong>
+      </p>
+      <p>{{ challenge.description }}</p>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-secondary" routerLink="/">Back to Challenges</button>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet>

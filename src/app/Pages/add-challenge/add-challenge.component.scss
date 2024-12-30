@@ -1,0 +1,66 @@
+
+
+  .card h2 {
+    justify-content: center;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+    padding: 20px;
+  }
+
+  .form-group {
+    font-size: 14px;
+    font-style: calibri;
+  }
+  .text-description {
+    width: 100%;
+  }
+
+  .car-container {
+    display: grid; 
+    margin-top: 70px;
+    margin-left: 45px;
+    margin-right: 45px;
+    gap: 20px;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .add-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    size: 100px;
+  }
+  textarea {
+    width: 100%; /* Takes full width of the container */
+    padding: 10px; /* Adds padding inside the text area */
+    border: 1px solid #ccc; /* Keeps styling consistent with other inputs */
+    border-radius: 3px; /* Smooth corners */
+    font-size: 16px; /* Improves readability of entered text */
+    resize: vertical; /* Allows resizing vertically only */
+    min-height: 120px; /* Ensures a minimum height for better usability */
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 2.375rem .75rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}

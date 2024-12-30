@@ -1,0 +1,21 @@
+<div class="container">
+    <!-- Add Button -->
+    
+  
+    <!-- Card Layout -->
+    <div class="card-container">
+      <div *ngFor="let challenge of submittedChallenges; let i = index" class="card">
+        <div class="card-header">
+          <h4>{{ challenge.title }}</h4>
+          <span>By: {{ challenge.createdBy }}</span>
+        </div>
+        <div class="card-body">
+          <p><strong>Description:</strong> {{ challenge.description }}</p>
+          <p><strong>Reply:</strong> {{ challenge.reply }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <router-outlet></router-outlet>
+  

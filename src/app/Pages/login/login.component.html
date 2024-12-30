@@ -1,0 +1,26 @@
+<div class="sidenav">
+    <div class="login-main-text">
+       <h2>DevlopersChallenge<br> Login Page</h2>
+       <p>Login or register from here to access.</p>
+    </div>
+ </div>
+ <div class="main">
+    <div class="col-md-6 col-sm-12">
+       <div class="login-form">
+          <form>
+             <div class="form-group">
+                <label>User Name</label>
+                <input type="text" [(ngModel)]="logiobj.username" class="form-control" placeholder="User Name" name="username" required>
+             </div>
+             <div class="form-group">
+                <label>Password</label>
+                <input type="password" [(ngModel)]="logiobj.password" class="form-control" placeholder="Password" name="password" required>
+             </div>
+             <a type="submit" class="btn btn-black" (click)="OnLogin()">Login</a>
+             
+          </form>
+       </div>
+    </div>
+ </div>
+
+ <router-outlet></router-outlet>
