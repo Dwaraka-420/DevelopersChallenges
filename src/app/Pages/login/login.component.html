@@ -1,26 +1,36 @@
-<div class="sidenav">
-    <div class="login-main-text">
-       <h2>DevlopersChallenge<br> Login Page</h2>
-       <p>Login or register from here to access.</p>
-    </div>
- </div>
- <div class="main">
-    <div class="col-md-6 col-sm-12">
-       <div class="login-form">
-          <form>
-             <div class="form-group">
-                <label>User Name</label>
-                <input type="text" [(ngModel)]="logiobj.username" class="form-control" placeholder="User Name" name="username" required>
-             </div>
-             <div class="form-group">
-                <label>Password</label>
-                <input type="password" [(ngModel)]="logiobj.password" class="form-control" placeholder="Password" name="password" required>
-             </div>
-             <a type="submit" class="btn btn-black" (click)="OnLogin()">Login</a>
-             
-          </form>
+<div class="container-fluid">
+   <div class="row">
+     <!-- Sidenav (left side) -->
+     <div class="col-md-4 col-sm-12 sidenav">
+       <div class="login-main-text">
+         <h2>Developer's Challenge<br>Login Page</h2>
+         <p>Login or register from here to access.</p>
        </div>
-    </div>
+     </div>
+  
+     <!-- Main content (login form on right) -->
+     <div class="col-md-8 col-sm-12 main-content">
+       <!-- Add company logo outside the login form -->
+       <div class="logo-container">
+         <img src="public/pdi_logo" alt="Company Logo" class="company-logo">
+  
+       </div>
+       
+       <div class="login-form">
+         <form (ngSubmit)="OnLogin()">
+           <div class="form-group">
+             <label for="username">User Name</label>
+             <input type="text" [(ngModel)]="logiobj.username" class="form-control" id="username" placeholder="User Name" name="username" required>
+           </div>
+           <div class="form-group">
+             <label for="password">Password</label>
+             <input type="password" [(ngModel)]="logiobj.password" class="form-control" id="password" placeholder="Password" name="password" required>
+           </div>
+           <button type="submit" class="btn btn-outline-dark offset-5">Login</button>
+         </form>
+       </div>
+     </div>
+   </div>
  </div>
-
+  
  <router-outlet></router-outlet>

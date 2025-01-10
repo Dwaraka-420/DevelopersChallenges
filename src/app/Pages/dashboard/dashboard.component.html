@@ -1,41 +1,47 @@
 <div class="dashboard">    
-    <!-- Navbar -->
-    <nav class="navbar p-2 navbar-expand-lg ">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav fs-4">
-              <li class="nav-item text-light">
-                <a class="navbar-brand nav-link" href="#"><img src="" alt="">Icon</a>
-              </li>
-              <li class="nav-item text-light">
-                <a class="nav-link" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" routerLink="/layout" routerlinkactive="active">Challenges</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" routerLink="/SubmitedChallenge" routerLinkActive="active">Submitted</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" aria-disabled="true" routerLink="/login" routerLinkActive="active">Logout</a>
-              </li>
-            </ul>
+  <!-- Navbar -->
+  <nav class="navbar p-2 navbar-expand-lg">
+      <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav fs-4">
+                  <!-- Logo -->
+                  <li class="nav-item">
+                    <img src="src\assets\pdi-logo.jpg" class="img-fluid" alt="PDI Logo" style="height: 40px;">
+                  </li>
+
+                  <!-- Navbar Links -->
+                  <li class="nav-item text-light">
+                      <a class="nav-link" aria-current="page" href="#" routerLink="/dashboard">Home</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#" routerLink="/layout" routerlinkactive="active">Challenges</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#" routerLink="/SubmitedChallenge" routerLinkActive="active">Submitted</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" aria-disabled="true" routerLink="/login" routerLinkActive="active">Logout</a>
+                  </li>
+              </ul>
           </div>
-        </div>
-      </nav>
+      </div>
+  </nav>
 
-    <!-- Welcome Header -->
-    <header class="welcome-header">
-        <h1>WELCOME TO DEVELOPER CHALLENGE PORTAL</h1>
-    </header>
+  <!-- Welcome Header -->
+  <header class="welcome-header">
+      <h1>WELCOME TO DEVELOPER CHALLENGE PORTAL</h1>
+  </header>
 
-    <!-- Content -->
-    <div class="content-container">
-        <p class="intro-text">Join exciting challenges, showcase your skills, and collaborate with fellow developers to solve problems and build amazing projects!</p>
-        <button class="cta-button">Get Started</button>
-    </div>
+  <!-- Content -->
+  <div class="content-container">
+      <p class="intro-text">Join exciting challenges, showcase your skills, and collaborate with fellow developers to solve problems and build amazing projects!</p>
+      <button class="cta-button">Get Started</button>
+  </div>
 </div>
+<footer class="bg-gray-800 text-white py-8 mt-auto ">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center "><p>© 2025 PDI Technologies. All rights reserved.</p></div></div></footer>
 <router-outlet></router-outlet>

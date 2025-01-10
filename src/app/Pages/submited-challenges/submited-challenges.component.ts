@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
-  imports: [CommonModule, RouterOutlet, FormsModule],
+  imports: [CommonModule, RouterOutlet, FormsModule,RouterOutlet,RouterModule],
   selector: 'app-submitted-challenges', // Corrected to match the component name
   templateUrl: './submited-challenges.component.html', // Corrected the file reference
   styleUrls: ['./submited-challenges.component.scss'] // Corrected the file reference
@@ -15,8 +16,8 @@ export class SubmittedChallengesComponent implements OnInit { // Added OnInit in
   isLoading: boolean = true; // Loading indicator
   errorMessage: string = ''; // Error message if the API call fails
   username: string | null = '';
-
   http = inject(HttpClient); // Injecting HttpClient
+  router = inject(Router); // Injecting Router
 
   ngOnInit(): void {
     debugger;
@@ -43,5 +44,8 @@ export class SubmittedChallengesComponent implements OnInit { // Added OnInit in
           this.isLoading = false;
         }
       });
+  }
+  navigateToChallengeDetails(challengeId: string): void {
+    this.router.navigate(['/layout/reply', challengeId]);
   }
 }

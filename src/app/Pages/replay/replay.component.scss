@@ -27,3 +27,22 @@
 .table-responsive{
   overflow-x: auto;
 }
+.Replay-button{
+  display: right;
+}
+.card-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+.reply-box textarea {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.reply-box button {
+  float: right;
+}

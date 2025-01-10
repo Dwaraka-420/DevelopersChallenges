@@ -60,47 +60,27 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #fffbfb;
-  border: 1px solid #5f4b92;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  border: 1px solid #85575726;
+  border-radius: 5px;
+
   overflow: hidden;
-  height: auto;
+  height: 90vh; /* Card height adjusted to fit the screen */
+  padding: 5px; /* Top, left, right padding with reduced bottom padding */
+  margin: 10px;
 }
 
-.card-body {
-  padding: 20px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 1rem;
-}
+// .card-body {
+//   padding: 10px; /* Inner padding inside the card body */
+//   flex-grow: 1;
+//   overflow-y: auto; /* Enable vertical scrolling */
+//   max-height: calc(100% - 75px); /* Adjust height to fit within the card */
+//   margin-bottom: 0; /* Remove unnecessary bottom gap */
+// }
 
 .card-body p {
   margin: 0;
   line-height: 1.5;
   font-size: 16px;
-}
-
-.card-body .btn {
-  padding: 8px 16px;
-  font-size: 14px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.card-body .btn:hover {
-  background-color: #0056b3;
 }
 
 /* Responsive Adjustments */
@@ -155,4 +135,12 @@ body {
 
 .text-danger {
   color: red;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
 }
