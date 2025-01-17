@@ -3,13 +3,14 @@ body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
+    color: white;
 }
 
 
 
 /* Navbar Styles */
 .navbar {
-    background-color: #963745;
+    background-color: #07003D;
     padding: 25px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -19,38 +20,19 @@ body {
     justify-content: center;
 }
 
-// .navbar-menu {
-//     display: flex;
-//     justify-content: space-around;
-//     list-style: none;
-//     margin: 0;
-//     padding: 0;
-//     width: 100%;
-//     max-width: 800px;
-// }
 
-// .navbar-item {
-//     flex: 1;
-//     text-align: center;
-// }
-
-// .navbar-link {
-//     text-decoration: none;
-//     color: white;
-//     font-weight: bold;
-//     font-size: 18px;
-//     padding: 35px;
-//     border-radius: 15px;
-//     transition: background-color 0.3s ease, color 0.3s ease;
-// }
 
 .nav-item{
-    padding: 0px 15px;
+    padding: 0px 15px;  
+    color: white;
 }
 
 .navbar-link:hover {
     background-color: red;
     color: #f8f9fa;
+}
+.nav-link {
+    color: white;
 }
 
 
@@ -60,13 +42,13 @@ body {
     margin: 30px 0;
     font-size: 28px;
     font-weight: bold;
-    color: #343a40;
+    color:#1226AA;
 }
 
 /* Content Styles */
 .content-container {
     text-align: center;
-    margin: 20px auto;
+    margin: 60px auto;
     padding: 20px;
     max-width: 800px;
     background-color: #fff;
@@ -77,7 +59,7 @@ body {
 .intro-text {
     font-size: 18px;
     margin: 20px 0;
-    color: #6c757d;
+    color:#00D2F4;
 }
 
 .cta-button {
@@ -95,3 +77,22 @@ body {
     background-color: #0056b3;
     transform: scale(0.5);
 }
+
+/* dashboard.component.scss */
+
+.bg-gray-800 {
+    background-color: #07003D; /* Example color, you can change it to your desired color */
+  }
+  
+  .text-white {
+    color: white;
+  }
+  
+  .text-dark {
+    color: #333;
+  }
+  
+  footer {
+    padding: 20px 0;
+    margin-top: auto;
+  }

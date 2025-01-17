@@ -1,39 +1,33 @@
-
-
-    <div class = "car-container p-0 card shadow-lg ">
-        <div class="card-header">
-            <h2>Challenge</h2>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" [(ngModel)]="entobj.Title" name="title" class="form-control" rows="2" style="width: 100%; padding: 10px;" style required name="title">
-              </div>
-    
-              <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" [(ngModel)]="entobj.Description" name="description" rows="5" style="width: 100%; padding: 10px;" required></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="title">createdBy</label>
-                <input type="text" [(ngModel)]="entobj.createdBy" name="createdBy" class="form-control" rows="2" style="width: 100%; padding: 10px;" style required name="title">
-              </div>
-    
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" class="form-select" required [(ngModel)]="entobj.Category" style="width:15%" name="category">
-                  <option value="">---Select a Category---</option>  
-                  <option value="DevOps">DevOps</option>
-                  <option value="Developer">Developer</option>
-                  <option value="Tested Database">Database</option>
-                  <option value="Tested Database">Testing</option>
-                </select>
-              </div>
-              <div class="add-button-container">
-                <button type="button" class="btn btn-primary btn-lg px-5 py-3" (click)="OnSubmit()">Submit</button>
-              </div>
-        </div>
+<div class="m-4 container-fluid mx-2">
+  <div class="card shadow-lg">
+    <div class="card-header header-part" style="background-color: rgba(7, 0, 61, 1);">
+      <h2 class="text-white">Challenge</h2>
     </div>
+    <div class="card-body">
+      <div class="form-group mb-3">
+        <label for="title" class="fs-5"><b>Title</b></label>
+        <input type="text" [(ngModel)]="entobj.Title" name="title" class="form-control" rows="2" style="width: 100%; padding: 10px;" required>
+      </div>
 
+      <div class="form-group mb-3">
+        <label for="description" class="fs-5"><b>Description</b></label>
+        <textarea id="description" [(ngModel)]="entobj.Description" class="form-control" name="description" rows="5" style="width: 100%; padding: 10px;" required></textarea>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="category" class="fs-5"><b>Category</b></label>
+        <select id="category" class="form-select" required [(ngModel)]="entobj.Category" style="width: 100%;" name="category">
+          <option value="">---Select a Category---</option>
+          <option value="DevOps">DevOps</option>
+          <option value="Developer">Developer</option>
+          <option value="Tested Database">Tested Database</option>
+        </select>
+      </div>
+
+      <div class="form-group mt-4  btn-center">
+        <button class="btn btn-primary py-2 px-3" type="submit" (click)="OnSubmit()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
 <router-outlet></router-outlet>

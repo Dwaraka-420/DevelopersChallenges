@@ -1,66 +1,146 @@
-/* Style the Add button */
-.add-button-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-    margin-top: 20px;
+/* General Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #142572; /* Background color */
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #80647d;
+  color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(58, 18, 18, 0.2);
+  flex-wrap: wrap; /* Ensure wrapping on smaller screens */
+}
+
+.navbar-brand {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+.category-dropdown {
+  flex-grow: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.category-dropdown select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+/* Card Styles */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+  gap: 20px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fffbfb;
+  border: 1px solid #85575726;
+  border-radius: 5px;
+
+  overflow: hidden;
+  height: 90vh; /* Card height adjusted to fit the screen */
+  padding: 5px; /* Top, left, right padding with reduced bottom padding */
+  margin: 10px;
+}
+
+// .card-body {
+//   padding: 10px; /* Inner padding inside the card body */
+//   flex-grow: 1;
+//   overflow-y: auto; /* Enable vertical scrolling */
+//   max-height: calc(100% - 75px); /* Adjust height to fit within the card */
+//   margin-bottom: 0; /* Remove unnecessary bottom gap */
+// }
+
+.card-body p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: center;
   }
-  
-  .add-button-container .btn {
-    font-size: 18px;
-    padding: 0px 0px;
+
+  .category-dropdown {
+    max-width: 100%;
+    margin-bottom: 10px;
   }
-  
-  /* Card Container Grid */
+
+  .navbar-actions {
+    justify-content: center;
+  }
+
   .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-  
-  /* Card Styles */
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+@media (min-width: 992px) {
+  .col-lg-3 {
+    flex: 0 0 25%; /* Set fixed width */
+    max-width: 25%;
+    box-sizing: border-box;
   }
-  
-  .card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+
+  .category-dropdown {
+    max-width: 300px;
+    margin: 0 auto; /* Center dropdown */
   }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #f1f1f1;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-  }
-  
-  .card-header h4 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
-  }
-  
-  .card-header span {
-    font-size: 14px;
-    color: #888;
-  }
-  
-  .card-body p {
-    margin: 10px 0;
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  
-  .card-body strong {
-    color: #555;
-  }
-  
+}
+
+/* Center Align Add Challenge Button */
+.add-button-container .btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.add-button-container .btn:hover {
+  background-color: #0056b3;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+}

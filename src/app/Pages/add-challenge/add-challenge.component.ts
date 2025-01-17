@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, Router } from '@angular/router';
+import { environment } from '../../../config';
 
 @Component({
   selector: 'app-add-challenge',
@@ -15,6 +16,7 @@ export class AddChallengeComponent {
     description: '',
     category: ''
   };
+  baseUrl = environment.baseUrl;
 
   @Output() challengeAdded = new EventEmitter<any>();
 
@@ -37,7 +39,7 @@ export class AddChallengeComponent {
 
   OnSubmit() {
     debugger;
-      this.http.post('https://localhost:7103/api/Api/AddChallenge', this.entobj).subscribe((res:any) => {
+      this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj).subscribe((res:any) => {
         if(res.success) {
           alert(res); // Display the plain text response
           this.router.navigateByUrl('/layout');

@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { environment } from '../../../config';
 
 @Component({
   selector: 'app-layout',
@@ -16,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit {
+  baseUrl = environment.baseUrl; // Base URL for the API
   challenges: any[] = []; // Array to hold challenges fetched from the API
   categories: any[] = []; // Array to hold categories fetched from the API
   isLoading: boolean = true; // Loading indicator
@@ -30,7 +32,7 @@ export class LayoutComponent implements OnInit {
 
   // Fetch categories from the backend API
   fetchCategories(): void {
-    const apiUrl = 'https://localhost:7103/api/Api/GetCategories'; // API endpoint to get categories
+    const apiUrl = `${this.baseUrl}/api/Api/GetCategories`; // API endpoint to get categories
     this.http.get<any[]>(apiUrl).subscribe({
       next: (data) => {
         this.categories = data; // Assign fetched categories
@@ -47,7 +49,7 @@ export class LayoutComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
   
-    const apiUrl = `https://localhost:7103/api/Api/GetChallengeByCategory?category=${category}`;
+    const apiUrl = `${this.baseUrl}/api/Api/GetChallengeByCategory?category=${category}`;
     this.http.get<any[]>(apiUrl).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
@@ -69,7 +71,7 @@ export class LayoutComponent implements OnInit {
 
   // Fetch all challenges from the API
   fetchChallenges(): void {
-    const apiUrl = 'https://localhost:7103/api/Api/Challenges';
+    const apiUrl = `${this.baseUrl}/api/Api/Challenges`;
     this.http.get<any[]>(apiUrl).subscribe({
       next: (data) => {
         this.challenges = data; 

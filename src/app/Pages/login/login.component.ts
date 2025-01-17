@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AppComponent } from "../../app.component";
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../config';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+
+  baseUrl = environment.baseUrl;
 
   logiobj: any ={
     username: '',
@@ -22,7 +25,7 @@ export class LoginComponent {
 
   OnLogin() {
     debugger;
-      this.http.post('https://localhost:7103/api/Auth/login', this.logiobj).subscribe((res:any) => {
+    this.http.post(`${this.baseUrl}/api/Auth/login`, this.logiobj).subscribe((res: any) => {
         if(res.success) {
           localStorage.setItem('username', this.logiobj.username); // Store the username in local storage
           alert('Login Success');
