@@ -4,16 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
+
 import { environment } from '../../../config';
-=======
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
 
 @Component({
   selector: 'app-replay',
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './replay.component.html',
-  styleUrl: './replay.component.scss'
+  styleUrls: ['./replay.component.scss']
 })
 export class ReplayComponent implements OnInit {
   baseUrl = environment.baseUrl; // Base URL for the API
@@ -36,50 +34,19 @@ export class ReplayComponent implements OnInit {
     if (id) {
       this.fetchChallengeDetails(id);
       this.fetchReplays(id);
-<<<<<<< HEAD
-    }
+
     // Set username in localStorage from login object
     if (this.logiobj.username) {
       localStorage.setItem('username', this.logiobj.username);
-=======
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
+
     }
-    // Set username in localStorage from login object
-    if (this.logiobj.username) {
-      localStorage.setItem('username', this.logiobj.username);
-    }
-  }
-
-  submitReply(): void {
-    if (!this.replyText.trim()) {
-      alert('Please enter a valid reply!');
-      return;
-    }
-
-    // Get the id parameter again to include in the payload
-    const apiUrl = 'https://localhost:7103/api/Api/AddChallengeToReplay';
-    const username = localStorage.getItem('username'); // Get username from localStorage
-    const id = this.route.snapshot.paramMap.get('id'); 
-
-    const payload = {
-      Content: this.replyText,
-      RepliedBy: username,
-      ChallengeId: id
-    };
-
-    this.http.post(apiUrl, payload).subscribe({
-      next: (response) => {
-        alert('Reply submitted successfully!');
-        this.replyText = ''; // Clear the textarea
-        this.showReplyBox = false; // Close the reply box
-        this.fetchReplays(this.challenge.id); // Refresh replays after submission
-      },
-      error: (error) => {
-        console.error('Error submitting reply:', error);
-        alert('Failed to submit reply. Please try again later.');
+      // Set username in localStorage from login object
+      if (this.logiobj.username) {
+        localStorage.setItem('username', this.logiobj.username);
       }
-    });
+    }
   }
+
 
   submitReply(): void {
     if (!this.replyText.trim()) {
@@ -128,11 +95,9 @@ export class ReplayComponent implements OnInit {
   }
 
   fetchReplays(id: string): void {
-<<<<<<< HEAD
+
     const apiUrl = `${this.baseUrl}/api/Api/GetReplays/${id}`;
-=======
-    const apiUrl = `https://localhost:7103/api/Api/GetReplays/${id}`;
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
+
     this.http.get<any[]>(apiUrl).subscribe({
       next: (data) => {
         this.replays = data;
@@ -147,11 +112,9 @@ export class ReplayComponent implements OnInit {
   updateReply(replyId: number, repliedBy: string, challengeId: number): void {
     const updatedContent = prompt('Enter updated reply content:');
     if (updatedContent) {
-<<<<<<< HEAD
-      const apiUrl = `${this.baseUrl}/api/Api/UpdateReplay/${replyId}`;
-=======
-      const apiUrl = `https://localhost:7103/api/Api/UpdateReplay/${replyId}`;
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
+ 
+      const apiUrl = `${environment.baseUrl}/api/Api/UpdateReplay/${replyId}`;
+
       const payload = {
         Content: updatedContent,
         RepliedBy: repliedBy,
@@ -175,11 +138,9 @@ export class ReplayComponent implements OnInit {
 
   deleteReply(replyId: number): void {
     if (confirm('Are you sure you want to delete this reply?')) {
-<<<<<<< HEAD
+
       const apiUrl = `${this.baseUrl}/api/Api/DeleteReplay/${replyId}`;
-=======
-      const apiUrl = `https://localhost:7103/api/Api/DeleteReplay/${replyId}`;
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
+
       
       // Use responseType: 'text' to handle the plain text response
       this.http.delete(apiUrl, { responseType: 'text' }).subscribe({

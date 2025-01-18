@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-<<<<<<< HEAD
+
 import { environment } from '../../../config';
-=======
->>>>>>> 4fb14a5945af8e9946e228f7a8aa52121e670901
+
 
 @Component({
   imports: [CommonModule, RouterOutlet, FormsModule,RouterOutlet,RouterModule],
