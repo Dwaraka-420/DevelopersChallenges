@@ -104,7 +104,7 @@ export class ReplayComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching replays:', error);
-        this.errorMessage = 'Failed to load replays.';
+        
       }
     });
   }
