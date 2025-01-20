@@ -13,7 +13,7 @@ import { environment } from '../../../config';
 })
 export class LoginComponent {
 
-  baseUrl = environment.baseUrl;
+  //baseUrl = environment.baseUrl;
 
   logiobj: any ={
     username: '',
@@ -25,7 +25,7 @@ export class LoginComponent {
 
   OnLogin() {
     debugger;
-    this.http.post(`https://localhost:7103/api/Auth/login`, this.logiobj).subscribe((res: any) => {
+    this.http.post('https://localhost:7103/api/Auth/login', this.logiobj).subscribe((res: any) => {
         if(res.success) {
           localStorage.setItem('username', this.logiobj.username); // Store the username in local storage
           alert('Login Success');
