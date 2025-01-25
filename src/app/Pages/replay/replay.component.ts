@@ -67,7 +67,9 @@ export class ReplayComponent implements OnInit {
 
     this.http.post(apiUrl, payload).subscribe({
       next: (response) => {
+        debugger;
         alert('Reply submitted successfully!');
+        this.mailsending();
         this.replyText = ''; // Clear the textarea
         this.showReplyBox = false; // Close the reply box
         this.fetchReplays(this.challenge.id); // Refresh replays after submission
@@ -155,5 +157,16 @@ export class ReplayComponent implements OnInit {
       });
     }
   }  
+
+  mailsending() {
+    this.http.get(`${this.baseUrl}/api/AwsAuthentication/get-secret`).subscribe((res: any) => {
+      if(!res.success) {
+        alert('Mail sent successfully');
+      }
+      else {
+        alert('Failed to send mail');
+      }
+    })
+  }
   
 }

@@ -41,6 +41,7 @@ export class AddChallengeComponent {
     debugger;
       this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj).subscribe((res:any) => {
         if(res.success) {
+          this.mailsending();
           alert(res); // Display the plain text response
           this.router.navigateByUrl('/layout');
         } else {
@@ -48,6 +49,16 @@ export class AddChallengeComponent {
         }
       })
 
+  }
+  mailsending() {
+    this.http.get(`${this.baseUrl}/api/AwsAuthentication/get-secret`).subscribe((res: any) => {
+      if(res.success) {
+        alert('Mail sent successfully');
+      }
+      else {
+        alert('Failed to send mail');
+      }
+    })
   }
 
 }
