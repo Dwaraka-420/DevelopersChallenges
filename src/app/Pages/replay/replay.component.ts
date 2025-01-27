@@ -159,7 +159,7 @@ export class ReplayComponent implements OnInit {
   }  
 
   mailsending() {
-    this.http.get(`${this.baseUrl}/api/AwsAuthentication/get-secret`).subscribe((res: any) => {
+    this.http.get(`${this.baseUrl}/api/Aws/get-secret`).subscribe((res: any) => {
       if(!res.success) {
         alert('Mail sent successfully');
       }

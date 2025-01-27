@@ -14,18 +14,13 @@ export class AddChallengeComponent {
   challenge = {
     title: '',
     description: '',
-    category: ''
+    category: '',
+    username: ''
   };
+  logiobj: any = {};
   baseUrl = environment.baseUrl;
 
   @Output() challengeAdded = new EventEmitter<any>();
-
-  onSubmit() {
-    if (this.challenge.title && this.challenge.description && this.challenge.category) {
-      this.challengeAdded.emit(this.challenge);
-      this.challenge = { title: '', description: '', category: '' }; // Reset form
-    }
-  }
 
   entobj: any = {
     Title: '',
@@ -34,24 +29,52 @@ export class AddChallengeComponent {
     Category: ''
   }
 
+  ngOnInit(): void {
+
+    // Set username in localStorage from login object
+    if (this.logiobj.username) {
+      localStorage.setItem('username', this.logiobj.username);
+
+    }
+      // Set username in localStorage from login object
+      if (this.logiobj.username) {
+        localStorage.setItem('username', this.logiobj.username);
+      }
+    }
+
+  
+
   http= inject(HttpClient);
   router= inject(Router);
 
+  
   OnSubmit() {
     debugger;
-      this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj).subscribe((res:any) => {
-        if(res.success) {
-          this.mailsending();
-          alert(res); // Display the plain text response
-          this.router.navigateByUrl('/layout');
-        } else {
-          alert('Failed to add challenge');
-        }
-      })
-
+  
+    // Add the username from localStorage
+    const username = localStorage.getItem('username');
+    if (username) {
+      this.entobj.CreatedBy = username; // Add username to the payload
+    }
+  
+    // Add the current date
+    const currentDate = new Date().toISOString(); // ISO format for date-time
+    this.entobj.createdAt = currentDate;
+  
+    // Make the POST request
+    this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj).subscribe((res: any) => {
+      if (res.success) {
+        this.mailsending(); // Call mail sending logic
+        alert('Challenge added successfully');
+        this.router.navigateByUrl('/layout'); // Navigate to another page
+      } else {
+        alert('Failed to add challenge');
+      }
+    });
   }
+  
   mailsending() {
-    this.http.get(`${this.baseUrl}/api/AwsAuthentication/get-secret`).subscribe((res: any) => {
+    this.http.get(`${this.baseUrl}/api/Aws/get-secret`).subscribe((res: any) => {
       if(res.success) {
         alert('Mail sent successfully');
       }
