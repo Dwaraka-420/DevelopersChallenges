@@ -13,33 +13,48 @@
                     </li>
                     <!-- Navbar Links -->
                     <li class="nav-item text-light">
-                        <a class="nav-link" aria-current="page" href="#" routerLink="/dashboard">Home</a>
+                        <a class="nav-link" aria-current="page" href="#" routerLink="/dashboard"><i class="bi bi-house-door"></i>&nbsp;Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" routerLink="/layout" routerlinkactive="active">Challenges</a>
+                        <a class="nav-link" href="#" routerLink="/layout" routerlinkactive="active"> <i class="bi bi-card-list"></i>&nbsp;Challenges</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" routerLink="/SubmitedChallenge" routerLinkActive="active">Submitted</a>
+                        <a class="nav-link" href="#" routerLink="/SubmitedChallenge" routerLinkActive="active"><i class="bi bi-card-checklist"></i>&nbsp;Submitted</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-disabled="true" routerLink="/login" routerLinkActive="active">Logout</a>
+                        <a class="nav-link" aria-disabled="true" routerLink="/login" routerLinkActive="active"><i class="bi bi-box-arrow-left"></i>&nbsp;Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
+        
     </nav>
+    <div class="scrolling-text mt-2">
+        <marquee behavior="scroll" direction="left">
+            <p class="mb-0 my-2"> Developer Challenges is a platform designed to facilitate collaboration and problem-solving among
+                developers. It serves as a space where developers can raise technical challenges they encounter during their
+                work, and seek solutions or advice from the community. Whether it's debugging complex code, understanding
+                new technologies, or finding the most efficient algorithm for a task, Developer Challenges provides an
+                environment where developers can communicate, share insights, and work together to overcome obstacles. By
+                participating in this platform, developers can learn from each other’s experiences, exchange ideas, and
+                ultimately enhance their skills and productivity. It encourages a collaborative culture, making it easier
+                for developers to find solutions to problems, improve their work, and drive innovation within their teams
+                and projects.
+            </p>
+        </marquee>
+    </div>
 
     <!-- Welcome Header -->
-    <div class="container mt-4" style="margin-left: 21%;">
-        <div class="header text-center w-75  rounded">
-            <h1 class="text-white py-3">WELCOME TO DEVELOPER CHALLENGE PORTAL</h1>
+    <div class="content-container-box">
+        <div class="container px-5">
+            <h2 class="text-white py-1">WELCOME TO DEVELOPER CHALLENGE PORTAL</h2>
         </div>
     </div>
 
     <!-- Content -->
-    <div class="content-container">
+    <div class="content-container py-2">
         <p class="intro-text">Join exciting challenges, showcase your skills, and collaborate with fellow developers to solve problems and build amazing projects!</p>
-        <button class="btn btn-primary">Get Started</button>
+        <button class="btn btn-primary pb-2">Get Started</button>
     </div>
     
     <!-- Footer -->

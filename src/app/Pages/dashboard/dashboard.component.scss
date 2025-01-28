@@ -5,7 +5,27 @@ body {
     background-color: #f8f9fa;
     color: white;
 }
+.dashboard {
+    position: relative; /* Make sure the pseudo-element is positioned correctly */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the container takes full height */
+}
 
+.dashboard::before {
+    content: ''; /* Required to create the pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('./developers-gif-showcase.gif'); /* Background image */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.3; /* Adjust opacity here (0 is fully transparent, 1 is fully opaque) */
+    z-index: -1; /* Keep the background behind the content */
+}
 
   
 
@@ -48,17 +68,27 @@ body {
 .content-container {
     text-align: center;
     margin: 60px auto;
-    padding: 20px;
     max-width: 800px;
     background-color: #fff;
     border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0.8;
+}
+.content-container-box {
+    text-align: center;
+    margin: 60px auto;
+    padding: 10px 40px;
+    max-width: 900px;
+    border-radius: 10px;
+    background-color: #07003D;
+    color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .intro-text {
     font-size: 18px;
     margin: 20px 0;
-    color:#00D2F4;
+    color:#07003D;
 }
 .header{
     background-color: #07003D;
@@ -81,4 +111,8 @@ body {
   footer {
     padding: 20px 0;
     margin-top: auto;
+  }
+  .scrolling-text{
+    background-color: #27205e;
+    color: #fff;
   }
