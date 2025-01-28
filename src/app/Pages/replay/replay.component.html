@@ -11,7 +11,7 @@
     {{ errorMessage }}
   </div>
   <div class="mb-2 d-flex">
-    <a class="nav-link fs-5" style="color: rgba(7, 0, 61, var(--tw-bg-opacity, 1));;" routerLink="/layout"><i class="bi bi-house-door-fill"></i>&nbsp;Challenge</a>&nbsp;<span class="pt-1"><i class="bi bi-arrow-left text-primary"></i></span>&nbsp;<span> <p class="fs-5">Replay</p></span>
+    <a class="nav-link fs-5" style="color: rgba(7, 0, 61, var(--tw-bg-opacity, 1));;" routerLink="/layout"><i class="bi bi-house-door-fill"></i>&nbsp;Challenge</a>&nbsp;<span class="pt-1"><i class="bi bi-arrow-left text-primary"></i></span>&nbsp;<span> <p class="fs-5">Reply</p></span>
   </div> 
 
   <!-- Challenge Card -->
@@ -67,15 +67,15 @@
       <div *ngFor="let reply of replays" class="mb-3">
         <div class="border p-3 rounded shadow-sm">
           <p class="mb-1">
-            <strong>Replied by: {{ reply.repliedBy }}</strong>
+            <strong style="color: #07003D; font-weight: 500;">Replied by: </strong><span>{{ reply.repliedBy }}</span>
           </p>
           <pre class="bg-light p-3 border rounded"><code>{{ reply.content }}</code></pre>
           <small class="text-muted">{{ reply.createdAt | date:'short' }}</small>
           
           <!-- Update and Delete Buttons -->
           <div class="mt-2">
-            <button class="btn btn-sm btn-warning me-2" (click)="updateReply(reply.id, reply.repliedBy, reply.challengeId)">Update</button>
-            <button class="btn btn-sm btn-danger" (click)="deleteReply(reply.id)">Delete</button>
+            <button class="btn me-2 text-white" style="font-size: 18px; background-color: #1e1375;" (click)="updateReply(reply.id, reply.repliedBy, reply.challengeId)"><i class="bi bi-pencil-square"></i></button>
+            <button class="btn btn-danger" style="font-size: 18px;" (click)="deleteReply(reply.id)"><i class="bi bi-trash"></i></button>
           </div>
         </div>
       </div>

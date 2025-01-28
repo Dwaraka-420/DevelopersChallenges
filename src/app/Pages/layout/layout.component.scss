@@ -144,3 +144,25 @@ body {
   max-width: 100%;
   display: block;
 }
+
+.header{
+  border-radius: 5px;
+}
+
+/* Hover effect for the card */
+.floating-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+}
+
+.floating-card:hover {
+  transform: translateY(-10px); /* Moves the card up */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adds a shadow to create a floating effect */
+}
+.created-info .label {
+  color: #49c4d1;  /* Cool Gray for labels */
+  font-weight: 500;
+}
+
+.created-info .content {
+  color: #9042be;  /* Pastel Peach for content */
+}
