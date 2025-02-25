@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { environment } from '../../../config';
 
 @Component({
@@ -83,10 +82,19 @@ export class ReplayComponent implements OnInit {
 
   fetchChallengeDetails(id: string): void {
     const apiUrl = `${this.baseUrl}/api/Api/GetChallengeById/${id}`;
-    this.http.get<any>(apiUrl).subscribe({
+    const token = sessionStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+    this.http.get<any>(apiUrl, { headers}).subscribe({
       next: (data) => {
         this.challenge = data;
         this.isLoading = false;
+
+        console.log('Challenge Data:', this.challenge); // Debugging Output
+
+        // Ensure filePath exists
+        if (!this.challenge.filePath || this.challenge.filePath.trim() === '') {
+          this.challenge.filePath = null; // Ensure null if empty
+        }
       },
       error: (error) => {
         console.error('Error fetching challenge details:', error);
@@ -94,15 +102,22 @@ export class ReplayComponent implements OnInit {
         this.isLoading = false;
       }
     });
-  }
+}
+
 
   fetchReplays(id: string): void {
-
     const apiUrl = `${this.baseUrl}/api/Api/GetReplays/${id}`;
+    const token = sessionStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
 
-    this.http.get<any[]>(apiUrl).subscribe({
+    this.http.get<any[]>(apiUrl, { headers }).subscribe({
       next: (data) => {
-        this.replays = data;
+        this.replays = data.map(reply => {
+          return {
+            ...reply,
+            canEditOrDelete: reply.repliedBy === localStorage.getItem('username')
+          }
+        });
       },
       error: (error) => {
         console.error('Error fetching replays:', error);
@@ -114,7 +129,8 @@ export class ReplayComponent implements OnInit {
   updateReply(replyId: number, repliedBy: string, challengeId: number): void {
     const updatedContent = prompt('Enter updated reply content:');
     if (updatedContent) {
- 
+        const token = sessionStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
       const apiUrl = `${environment.baseUrl}/api/Api/UpdateReplay/${replyId}`;
 
       const payload = {
@@ -124,7 +140,7 @@ export class ReplayComponent implements OnInit {
       };
   
       // Handle plain text response
-      this.http.put(apiUrl, payload, { responseType: 'text' }).subscribe({
+      this.http.put(apiUrl, payload, { headers, responseType: 'text' }).subscribe({
         next: (response) => {
           alert(response); // Display the text response from the API
           this.fetchReplays(this.challenge.id); // Refresh replies
@@ -140,23 +156,24 @@ export class ReplayComponent implements OnInit {
 
   deleteReply(replyId: number): void {
     if (confirm('Are you sure you want to delete this reply?')) {
-
-      const apiUrl = `${this.baseUrl}/api/Api/DeleteReplay/${replyId}`;
-
-      
-      // Use responseType: 'text' to handle the plain text response
-      this.http.delete(apiUrl, { responseType: 'text' }).subscribe({
-        next: (response) => {
-          alert(response); // Show the response message
-          this.fetchReplays(this.challenge.id); // Refresh replies
-        },
-        error: (error) => {
-          console.error('Error deleting reply:', error);
-          alert('Failed to delete reply.');
-        }
-      });
+        const apiUrl = `${this.baseUrl}/api/Api/DeleteReplay/${replyId}`;
+        const token = sessionStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+        this.http.delete(apiUrl, {headers, responseType: 'text' }).subscribe({
+            next: (response) => {
+                alert(response);
+                // Remove the deleted reply from the replays array
+                this.replays = this.replays.filter(reply => reply.id !== replyId);
+            },
+            error: (error) => {
+                console.error('Error deleting reply:', error);
+                alert('Failed to delete reply.');
+            }
+        });
     }
-  }  
+  }
+
+ 
 
   mailsending() {
     this.http.get(`${this.baseUrl}/api/Aws/get-secret`).subscribe((res: any) => {

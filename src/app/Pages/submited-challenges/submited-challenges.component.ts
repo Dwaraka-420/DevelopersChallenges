@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { environment } from '../../../config';
@@ -35,8 +35,17 @@ export class SubmittedChallengesComponent implements OnInit { // Added OnInit in
   }
 
   fetchSubmittedChallenges(username: string): void {
+    // Get token from sessionStorage
+    const token = sessionStorage.getItem('token');
+
+    // Create headers with Authorization token
+    const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`, // ✅ Include Bearer Token
+        'Content-Type': 'application/json'  // ✅ Ensure correct Content-Type
+    });
+
     this.http
-      .get(`${this.baseUrl}/api/Api/ChallengesByUser?username=${username}`)
+      .get(`${this.baseUrl}/api/Api/ChallengesByUser?username=${username}`, { headers })
       .subscribe({
         next: (response: any) => {
           this.submittedChallenges = response; // Assign fetched data to the array
@@ -44,11 +53,18 @@ export class SubmittedChallengesComponent implements OnInit { // Added OnInit in
         },
         error: (error) => {
           console.error('Error fetching submitted challenges:', error); // Handle API error
+          
+          if (error.status === 401) {
+            alert('Session expired. Please log in again.');
+            sessionStorage.removeItem("token"); // Clear token on unauthorized error
+            window.location.href = "/login"; // Redirect to login page
+          }
           this.errorMessage = 'Failed to load submitted challenges.'; // Display error message
           this.isLoading = false;
         }
       });
   }
+
   navigateToChallengeDetails(challengeId: string): void {
     this.router.navigate(['/layout/reply', challengeId]);
   }

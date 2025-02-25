@@ -1,18 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterLink, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../config';
 
 @Component({
   selector: 'app-layout',
-  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
@@ -23,7 +19,12 @@ export class LayoutComponent implements OnInit {
   isLoading: boolean = true; // Loading indicator
   errorMessage: string = ''; // Error message if the API call fails
   selectedCategory: string = ''; // Selected category
-  constructor(private http: HttpClient, private router: Router) {}
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
     this.fetchCategories(); // Fetch categories for the dropdown
@@ -32,25 +33,38 @@ export class LayoutComponent implements OnInit {
 
   // Fetch categories from the backend API
   fetchCategories(): void {
-    const apiUrl = `${this.baseUrl}/api/Api/GetCategories`; // API endpoint to get categories
-    this.http.get<any[]>(apiUrl).subscribe({
-      next: (data) => {
-        this.categories = data; // Assign fetched categories
-      },
-      error: (error) => {
-        console.error('Error fetching categories:', error);
-        this.errorMessage = 'Failed to load categories';
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      const apiUrl = `${this.baseUrl}/api/Api/GetCategories`; // API endpoint to get categories
+      const token = sessionStorage.getItem("token"); // Retrieve token from sessionStorage
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined; // Define headers with Authorization if the token exists
+      this.http.get<any[]>(apiUrl, { headers }).subscribe({
+        next: (data) => {
+          this.categories = data; // Assign fetched categories
+        },
+        error: (error) => {
+          console.error('Error fetching categories:', error);
+
+          if (error.status === 401) {
+            alert('Session expired. Please log in again.');
+            sessionStorage.removeItem("token"); // Clear token on unauthorized error
+            window.location.href = "/login"; // Redirect to login page
+          }
+          this.errorMessage = 'Failed to load categories';
+        }
+      });
+    }
   }
 
   // Fetch challenges filtered by category
   fetchChallengesByCategory(category: string): void {
     this.isLoading = true;
     this.errorMessage = '';
-  
+
+    const token = sessionStorage.getItem("token"); // Retrieve token from sessionStorage
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined; // Define headers with Authorization if the token exists
+
     const apiUrl = `${this.baseUrl}/api/Api/GetChallengeByCategory?category=${category}`;
-    this.http.get<any[]>(apiUrl).subscribe({
+    this.http.get<any[]>(apiUrl, { headers}).subscribe({
       next: (data) => {
         if (data && data.length > 0) {
           this.challenges = data;
@@ -62,6 +76,12 @@ export class LayoutComponent implements OnInit {
       },
       error: (error) => {
         console.error(`Error fetching data for category (${category}):`, error);
+
+        if(error.status === 401) {
+          alert('Session expired. Please log in again.');
+          sessionStorage.removeItem("token"); // Clear token on unauthorized error
+          window.location.href = "/login"; // Redirect to login page
+        }
         this.errorMessage = `Failed to fetch data for category: ${category}`;
         this.challenges = []; // Clear the challenges if an error occurs
         this.isLoading = false;
@@ -71,18 +91,34 @@ export class LayoutComponent implements OnInit {
 
   // Fetch all challenges from the API
   fetchChallenges(): void {
-    const apiUrl = `${this.baseUrl}/api/Api/Challenges`;
-    this.http.get<any[]>(apiUrl).subscribe({
-      next: (data) => {
-        this.challenges = data; 
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching challenges:', error);
-        this.errorMessage = 'Failed to load challenges';
-        this.isLoading = false;
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      const apiUrl = `${this.baseUrl}/api/Api/Challenges`;
+
+      // Retrieve token from sessionStorage
+      const token = sessionStorage.getItem("token");
+
+      // Define headers with Authorization if the token exists
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+
+      this.http.get<any[]>(apiUrl, { headers }).subscribe({
+        next: (data) => {
+          this.challenges = data;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching challenges:', error);
+
+          if (error.status === 401) {
+            alert('Session expired. Please log in again.');
+            sessionStorage.removeItem("token"); // Clear token on unauthorized error
+            window.location.href = "/login"; // Redirect to login page
+          }
+
+          this.errorMessage = 'Failed to load challenges';
+          this.isLoading = false;
+        }
+      });
+    }
   }
 
   // Handle category selection
@@ -94,6 +130,7 @@ export class LayoutComponent implements OnInit {
       this.fetchChallenges(); // Fetch all challenges if no category is selected
     }
   }
+
   navigateToChallengeDetails(challengeId: string): void {
     this.router.navigate(['/layout/reply', challengeId]);
   }

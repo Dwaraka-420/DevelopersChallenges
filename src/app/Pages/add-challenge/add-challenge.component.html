@@ -21,13 +21,40 @@
           <option value="DevOps">DevOps</option>
           <option value="Developer">Developer</option>
           <option value="Tested Database">Tested Database</option>
+          <option value="other's">other’s</option>
         </select>
       </div>
 
       <div class="form-group mt-4 btn-center">
         <button class="btn btn-primary py-2 px-3" type="submit" (click)="OnSubmit()">Submit</button>
       </div>
+      
+      <div>
+        <!-- File Upload Button -->
+        <label for="fileInput" class="upload-button">
+          <mat-icon>cloud_upload</mat-icon> Upload File
+          <input type="file" id="fileInput" (change)="onFileSelected($event)">
+        </label>
+      
+        <!-- Display Selected File Name -->
+        <p *ngIf="selectedFileName">Selected File: <strong>{{ selectedFileName }}</strong></p>
+      
+        <!-- Upload Button -->
+        <button mat-raised-button color="primary" (click)="uploadFile()" >
+          Upload
+        </button>
+      
+        <!-- Show Upload Progress -->
+        <p *ngIf="uploadProgress !== null">Upload Progress: {{ uploadProgress }}%</p>
+      
+        <!-- Show API Response -->
 
+      </div>
+      
+
+     
+      
+      
       
     </div>
   </div>

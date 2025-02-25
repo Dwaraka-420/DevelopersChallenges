@@ -27,8 +27,17 @@
       </p>
       <pre class="bg-light p-3 border rounded"><code>{{ challenge.description }}</code></pre>
     </div>
+    <!-- Extract and Display Only the File Name -->
+    <div *ngIf="challenge.filepath">
+  <a [href]="challenge.filepath" target="_blank" download>
+    <i class="bi bi-download"></i> Download {{ challenge.filepath }}
+  </a>
+</div>
+
+
     <div class="card-footer py-1">
       <a routerLink="/layout"><i class="bi bi-box-arrow-left fs-4 text-danger"></i></a>
+      <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
       <button class="btn btn-sm btn-primary" (click)="toggleReplyBox()"><i class="bi bi-reply-fill"></i>&nbsp;&nbsp;Reply</button>
     </div>
   </div>
@@ -73,7 +82,7 @@
           <small class="text-muted">{{ reply.createdAt | date:'short' }}</small>
           
           <!-- Update and Delete Buttons -->
-          <div class="mt-2">
+          <div class="mt-2" *ngIf="reply.canEditOrDelete">
             <button class="btn me-2 text-white" style="font-size: 18px; background-color: #1e1375;" (click)="updateReply(reply.id, reply.repliedBy, reply.challengeId)"><i class="bi bi-pencil-square"></i></button>
             <button class="btn btn-danger" style="font-size: 18px;" (click)="deleteReply(reply.id)"><i class="bi bi-trash"></i></button>
           </div>

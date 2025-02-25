@@ -27,7 +27,8 @@ export class LoginComponent {
     debugger;
     this.http.post('https://localhost:7103/api/Auth/login', this.logiobj).subscribe((res: any) => {
         if(res.success) {
-          localStorage.setItem('username', this.logiobj.username); // Store the username in local storage
+          localStorage.setItem('username', this.logiobj.username);
+          sessionStorage.setItem('token', res.token) // Store the username in local storage
           alert('Login Success');
           this.router.navigateByUrl('dashboard')
         } else {
