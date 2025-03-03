@@ -91,6 +91,7 @@ export class LayoutComponent implements OnInit {
 
   // Fetch all challenges from the API
   fetchChallenges(): void {
+    debugger;
     if (isPlatformBrowser(this.platformId)) {
       const apiUrl = `${this.baseUrl}/api/Api/Challenges`;
 

@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../../config';
+// import { error } from 'node:console'; // Remove this line
+
 
 @Component({
   selector: 'app-replay',
@@ -13,39 +15,28 @@ import { environment } from '../../../config';
   styleUrls: ['./replay.component.scss']
 })
 export class ReplayComponent implements OnInit {
-  baseUrl = environment.baseUrl; // Base URL for the API
-  challenge: any = {}; // Store challenge details
-  replays: any[] = []; // Store replays for the challenge
+  baseUrl = environment.baseUrl;
+  challenge: any = {}; 
+  replays: any[] = []; 
   isLoading: boolean = true;
   errorMessage: string = '';
   showReplyBox = false;
   replyText: string = '';
-  logiobj: any = {}; // Object to store login details
-
-  toggleReplyBox(): void {
-    this.showReplyBox = !this.showReplyBox;
-  }
+  currentUser: string = localStorage.getItem('username') || '';
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id'); // Get the id parameter
+    const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.fetchChallengeDetails(id);
       this.fetchReplays(id);
-
-    // Set username in localStorage from login object
-    if (this.logiobj.username) {
-      localStorage.setItem('username', this.logiobj.username);
-
-    }
-      // Set username in localStorage from login object
-      if (this.logiobj.username) {
-        localStorage.setItem('username', this.logiobj.username);
-      }
     }
   }
 
+  toggleReplyBox(): void {
+    this.showReplyBox = !this.showReplyBox;
+  }
 
   submitReply(): void {
     if (!this.replyText.trim()) {
@@ -53,29 +44,25 @@ export class ReplayComponent implements OnInit {
       return;
     }
 
-    // Get the id parameter again to include in the payload
     const apiUrl = `${this.baseUrl}/api/Api/AddChallengeToReplay`;
-    const username = localStorage.getItem('username'); // Get username from localStorage
-    const id = this.route.snapshot.paramMap.get('id'); 
-
+    const token = sessionStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
     const payload = {
       Content: this.replyText,
-      RepliedBy: username,
-      ChallengeId: id
+      RepliedBy: this.currentUser,
+      ChallengeId: this.challenge.id
     };
 
-    this.http.post(apiUrl, payload).subscribe({
-      next: (response) => {
-        debugger;
+    this.http.post(apiUrl, payload, { headers }).subscribe({
+      next: () => {
         alert('Reply submitted successfully!');
-        this.mailsending();
-        this.replyText = ''; // Clear the textarea
-        this.showReplyBox = false; // Close the reply box
-        this.fetchReplays(this.challenge.id); // Refresh replays after submission
+        this.replyText = ''; 
+        this.showReplyBox = false;
+        this.fetchReplays(this.challenge.id);
       },
-      error: (error) => {
-        console.error('Error submitting reply:', error);
-        alert('Failed to submit reply. Please try again later.');
+      error: () => {
+        alert('Failed to submit reply.');
+
       }
     });
   }
@@ -84,26 +71,18 @@ export class ReplayComponent implements OnInit {
     const apiUrl = `${this.baseUrl}/api/Api/GetChallengeById/${id}`;
     const token = sessionStorage.getItem('token');
     const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
-    this.http.get<any>(apiUrl, { headers}).subscribe({
+    
+    this.http.get<any>(apiUrl, { headers }).subscribe({
       next: (data) => {
         this.challenge = data;
         this.isLoading = false;
-
-        console.log('Challenge Data:', this.challenge); // Debugging Output
-
-        // Ensure filePath exists
-        if (!this.challenge.filePath || this.challenge.filePath.trim() === '') {
-          this.challenge.filePath = null; // Ensure null if empty
-        }
       },
-      error: (error) => {
-        console.error('Error fetching challenge details:', error);
+      error: () => {
         this.errorMessage = 'Failed to load challenge details.';
-        this.isLoading = false;
+        
       }
     });
-}
-
+  }
 
   fetchReplays(id: string): void {
     const apiUrl = `${this.baseUrl}/api/Api/GetReplays/${id}`;
@@ -112,78 +91,129 @@ export class ReplayComponent implements OnInit {
 
     this.http.get<any[]>(apiUrl, { headers }).subscribe({
       next: (data) => {
-        this.replays = data.map(reply => {
-          return {
-            ...reply,
-            canEditOrDelete: reply.repliedBy === localStorage.getItem('username')
-          }
-        });
+        this.replays = data.map(reply => ({
+          ...reply,
+          canEditOrDelete: reply.repliedBy === this.currentUser,
+          isEditing: false,
+          editedText: reply.content,
+          showReplyBox: false // ✅ For replying to a reply
+        }));
       },
       error: (error) => {
-        console.error('Error fetching replays:', error);
-        
+        console.error('Failed to load replays.', error);
+        if (error.status === 401) {
+          alert('Session expired. Please log in again.');
+          sessionStorage.removeItem("token");
+          window.location.href = "/login";
+        }
       }
     });
   }
 
-  updateReply(replyId: number, repliedBy: string, challengeId: number): void {
-    const updatedContent = prompt('Enter updated reply content:');
-    if (updatedContent) {
-        const token = sessionStorage.getItem('token');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
-      const apiUrl = `${environment.baseUrl}/api/Api/UpdateReplay/${replyId}`;
+  editReply(reply: any): void {
+    reply.isEditing = true;
+  }
 
-      const payload = {
-        Content: updatedContent,
-        RepliedBy: repliedBy,
-        ChallengeId: challengeId
-      };
-  
-      // Handle plain text response
-      this.http.put(apiUrl, payload, { headers, responseType: 'text' }).subscribe({
-        next: (response) => {
-          alert(response); // Display the text response from the API
-          this.fetchReplays(this.challenge.id); // Refresh replies
+  cancelEdit(reply: any): void {
+    reply.isEditing = false;
+    reply.editedText = reply.content;
+  }
+
+  saveEditedReply(reply: any): void {
+    const token = sessionStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+    const apiUrl = `${this.baseUrl}/api/Api/UpdateReplay/${reply.id}`;
+
+    const payload = {
+      Content: reply.editedText,
+      RepliedBy: reply.repliedBy,
+      ChallengeId: reply.challengeId
+    };
+
+    this.http.put(apiUrl, payload, { headers, responseType: 'text' }).subscribe({
+      next: () => {
+        reply.content = reply.editedText;
+        reply.isEditing = false;
+      },
+      error: () => {
+        alert('Failed to update reply.');
+      }
+    });
+  }
+
+  markAsAccepted(reply: any): void {
+    if (confirm('Mark this reply as accepted?')) {
+      reply.isAccepted = true;
+
+      const apiUrl = `${this.baseUrl}/api/Api/MarkAsAccepted/${reply.id}`;
+      this.http.post(apiUrl, {}).subscribe({
+        next: () => {
+          alert('Reply marked as accepted!');
         },
-        error: (error) => {
-          console.error('Error updating reply:', error);
-          alert('Failed to update reply.');
+        error: () => {
+          alert('Failed to mark reply as accepted.');
         }
       });
     }
   }
-  
 
+  toggleReplyToReply(reply: any): void {
+    reply.showReplyBox = !reply.showReplyBox;
+  }
+
+  submitReplyToReply(reply: any): void {
+    if (!reply.replyText.trim()) {
+      alert('Reply cannot be empty.');
+      return;
+    }
+
+    const apiUrl = `${this.baseUrl}/api/Api/ReplyToReply`;
+    const token = sessionStorage.getItem('token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+    
+    const payload = {
+      Content: reply.replyText,
+      RepliedBy: this.currentUser,
+      ParentReplyId: reply.id
+    };
+
+    this.http.post(apiUrl, payload, { headers }).subscribe({
+      next: () => {
+        alert('Reply added successfully!');
+        this.fetchReplays(this.challenge.id);
+      },
+      error: () => {
+        alert('Failed to reply.');
+      }
+    });
+  }
   deleteReply(replyId: number): void {
     if (confirm('Are you sure you want to delete this reply?')) {
-        const apiUrl = `${this.baseUrl}/api/Api/DeleteReplay/${replyId}`;
-        const token = sessionStorage.getItem('token');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
-        this.http.delete(apiUrl, {headers, responseType: 'text' }).subscribe({
-            next: (response) => {
-                alert(response);
-                // Remove the deleted reply from the replays array
-                this.replays = this.replays.filter(reply => reply.id !== replyId);
-            },
-            error: (error) => {
-                console.error('Error deleting reply:', error);
-                alert('Failed to delete reply.');
-            }
-        });
+      const apiUrl = `${this.baseUrl}/api/Api/DeleteReplay/${replyId}`;
+      const token = sessionStorage.getItem('token');
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+      
+      this.http.delete(apiUrl, { headers, responseType: 'text' }).subscribe({
+        next: () => {
+          this.replays = this.replays.filter(reply => reply.id !== replyId);
+        },
+        error: (error) => {
+          console.error('Error deleting reply:', error);
+        }
+      });
     }
   }
 
- 
+  downloadFile() {
+   
+    const apiUrl = `${this.baseUrl}/api/S3/download?BucketName=${environment.s3BucketName}&FileKey=${this.challenge.filepath}`;
 
-  mailsending() {
-    this.http.get(`${this.baseUrl}/api/Aws/get-secret`).subscribe((res: any) => {
-      if(!res.success) {
-        alert('Mail sent successfully');
-      }
-      else {
-        alert('Failed to send mail');
-      }
-    })
-  }
-  
+    // ✅ Create a hidden <a> tag to trigger the download
+    const link = document.createElement('a');
+    link.href = apiUrl;
+    link.target = "_blank"; // Open in new tab (optional)
+    link.setAttribute('download', ''); // Let the browser handle file name
+    link.click();
+}
+
 }

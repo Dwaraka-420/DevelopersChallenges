@@ -31,12 +31,14 @@ export class AddChallengeComponent {
   router = inject(Router);
 
   ngOnInit(): void {
-    // ✅ Initialize username from localStorage
-    const username = localStorage.getItem('username');
-    if (username) {
-      this.entobj.CreatedBy = username;
+    if (typeof window !== 'undefined') { // ✅ Only access localStorage in the browser
+      const username = localStorage.getItem('username');
+      if (username) {
+        this.entobj.CreatedBy = username;
+      }
     }
   }
+  
 
   // ✅ File selection logic
   uploadProgress: number | null = null;
@@ -86,18 +88,22 @@ export class AddChallengeComponent {
 
   // ✅ Submit Challenge AFTER Uploading File
   async OnSubmit() {
+    debugger;
     try {
-      if (!this.uploadedFileUrl) {
+      if (this.selectedFile) {
         alert('Uploading file... Please wait.');
         this.uploadedFileUrl = await this.uploadFile();  // ✅ Wait for file upload
+        this.entobj.filepath = this.uploadedFileUrl; // ✅ Attach file only if uploaded
+      } else {
+        this.entobj.filepath = ''; // ✅ No file uploaded
       }
-
-      // ✅ Ensure file URL is attached
-      this.entobj.filepath = this.uploadedFileUrl;
       this.entobj.createdAt = new Date().toISOString();
 
+      const token = sessionStorage.getItem('token');
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
+
       // ✅ Make the POST request to submit challenge
-      this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj).subscribe((res: any) => {
+      this.http.post(`${this.baseUrl}/api/Api/AddChallenge`, this.entobj, { headers} ).subscribe((res: any) => {
         if (res.success) {
           this.mailsending();
           alert('Challenge added successfully');
@@ -109,6 +115,11 @@ export class AddChallengeComponent {
 
     } catch (error) {
       console.error('Error in challenge submission:', error);
+      if(error = 401) {
+        alert('Session expired. Please log in again.'); 
+        sessionStorage.removeItem("token");
+        window.location.href = "/login";
+      }
       alert('Challenge submission failed.');
     }
   }
