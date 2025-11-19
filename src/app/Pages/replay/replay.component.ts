@@ -23,6 +23,10 @@ export class ReplayComponent implements OnInit {
   showReplyBox = false;
   replyText: string = '';
   currentUser: string = localStorage.getItem('username') || '';
+  
+  // Inject dependencies
+  route = inject(ActivatedRoute);
+  http = inject(HttpClient);
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -71,7 +75,7 @@ export class ReplayComponent implements OnInit {
     const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
     
     this.http.get<any>(apiUrl, { headers }).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.challenge = data;
         this.isLoading = false;
       },
@@ -88,8 +92,8 @@ export class ReplayComponent implements OnInit {
     const headers = token ? { 'Authorization': `Bearer ${token}` } : undefined;
 
     this.http.get<any[]>(apiUrl, { headers }).subscribe({
-      next: (data) => {
-        this.replays = data.map(reply => ({
+      next: (data: any) => {
+        this.replays = data.map((reply: any) => ({
           ...reply,
           canEditOrDelete: reply.repliedBy === this.currentUser,
           isEditing: false,
@@ -97,7 +101,7 @@ export class ReplayComponent implements OnInit {
           showReplyBox: false // ✅ For replying to a reply
         }));
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Failed to load replays.', error);
         if (error.status === 401) {
           alert('Session expired. Please log in again.');
@@ -195,7 +199,7 @@ export class ReplayComponent implements OnInit {
         next: () => {
           this.replays = this.replays.filter(reply => reply.id !== replyId);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error deleting reply:', error);
         }
       });
