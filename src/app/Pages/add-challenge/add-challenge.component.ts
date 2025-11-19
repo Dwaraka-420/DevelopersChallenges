@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../config';
 
 @Component({
@@ -19,6 +20,7 @@ export class AddChallengeComponent {
   };
   logiobj: any = {};
   baseUrl = environment.baseUrl;
+  authService = inject(AuthService);
 
   @Output() challengeAdded = new EventEmitter<any>();
 
@@ -30,17 +32,11 @@ export class AddChallengeComponent {
   }
 
   ngOnInit(): void {
-
-    // Set username in localStorage from login object
+    // Set username using AuthService (only if needed)
     if (this.logiobj.username) {
-      localStorage.setItem('username', this.logiobj.username);
-
+      this.authService.setUsername(this.logiobj.username);
     }
-      // Set username in localStorage from login object
-      if (this.logiobj.username) {
-        localStorage.setItem('username', this.logiobj.username);
-      }
-    }
+  }
 
   
 
@@ -51,8 +47,8 @@ export class AddChallengeComponent {
   OnSubmit() {
     debugger;
   
-    // Add the username from localStorage
-    const username = localStorage.getItem('username');
+    // Add the username using AuthService
+    const username = this.authService.getUsername();
     if (username) {
       this.entobj.CreatedBy = username; // Add username to the payload
     }

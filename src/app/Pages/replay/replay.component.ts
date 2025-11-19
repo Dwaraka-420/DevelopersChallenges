@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 import { environment } from '../../../config';
 
@@ -22,12 +23,13 @@ export class ReplayComponent implements OnInit {
   showReplyBox = false;
   replyText: string = '';
   logiobj: any = {}; // Object to store login details
+  authService = inject(AuthService);
+  route = inject(ActivatedRoute);
+  http = inject(HttpClient);
 
   toggleReplyBox(): void {
     this.showReplyBox = !this.showReplyBox;
   }
-
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id'); // Get the id parameter
@@ -35,14 +37,9 @@ export class ReplayComponent implements OnInit {
       this.fetchChallengeDetails(id);
       this.fetchReplays(id);
 
-    // Set username in localStorage from login object
-    if (this.logiobj.username) {
-      localStorage.setItem('username', this.logiobj.username);
-
-    }
-      // Set username in localStorage from login object
+      // Set username using AuthService (only if needed)
       if (this.logiobj.username) {
-        localStorage.setItem('username', this.logiobj.username);
+        this.authService.setUsername(this.logiobj.username);
       }
     }
   }
@@ -56,7 +53,7 @@ export class ReplayComponent implements OnInit {
 
     // Get the id parameter again to include in the payload
     const apiUrl = `${this.baseUrl}/api/Api/AddChallengeToReplay`;
-    const username = localStorage.getItem('username'); // Get username from localStorage
+    const username = this.authService.getUsername(); // Get username using AuthService
     const id = this.route.snapshot.paramMap.get('id'); 
 
     const payload = {

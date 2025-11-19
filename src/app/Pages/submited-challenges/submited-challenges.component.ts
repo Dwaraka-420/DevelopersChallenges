@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 import { environment } from '../../../config';
 
@@ -22,10 +23,13 @@ export class SubmittedChallengesComponent implements OnInit { // Added OnInit in
   username: string | null = '';
   http = inject(HttpClient); // Injecting HttpClient
   router = inject(Router); // Injecting Router
+  authService = inject(AuthService); // Injecting Auth Service
 
   ngOnInit(): void {
     debugger;
-    this.username = localStorage.getItem('username'); // Fetching username from local storage
+    // Use AuthService to get username
+    this.username = this.authService.getUsername();
+    
     if (this.username) {
       this.fetchSubmittedChallenges(this.username); // Calling the method to fetch challenges
     } else {
