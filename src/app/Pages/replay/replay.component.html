@@ -1,4 +1,4 @@
-<div class="container-fluid mt-4">
+<div class="container-fluid">
   <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="text-center">
     <div class="spinner-border" role="status">
@@ -10,8 +10,8 @@
   <div *ngIf="errorMessage" class="alert alert-danger text-center">
     {{ errorMessage }}
   </div>
-  <div class="mb-2 d-flex">
-    <a class="nav-link fs-5" style="color: rgba(7, 0, 61, var(--tw-bg-opacity, 1));;" routerLink="/layout"><i class="bi bi-house-door-fill"></i>&nbsp;Challenge</a>&nbsp;<span class="pt-1"><i class="bi bi-arrow-left text-primary"></i></span>&nbsp;<span> <p class="fs-5">Reply</p></span>
+  <div class="d-flex p-3 pt-2 pb-2 mb-1" style="background-color: rgba(7, 0, 61, var(--tw-bg-opacity, 1)); color: #fff;">
+    <a class="nav-link fs-5"  routerLink="/layout"><i class="bi bi-card-list"></i>&nbsp;Challenges</a>&nbsp;<span class="pt-1"><i class="bi bi-arrow-left text-white"></i></span>&nbsp;<span> <p class="fs-5 mb-0"><i class="bi bi-card-checklist"></i>&nbsp;Reply</p></span>
   </div> 
 
   <!-- Challenge Card -->
@@ -27,9 +27,18 @@
       </p>
       <pre class="bg-light p-3 border rounded"><code>{{ challenge.description }}</code></pre>
     </div>
+    <!-- Extract and Display Only the File Name -->
+    <div *ngIf="challenge.filepath">
+  <a [href]="challenge.filepath" target="_blank" download (click)="downloadFile()">
+    <i class="bi bi-download"></i> {{ challenge.filepath }}
+  </a>
+</div>
+
+
     <div class="card-footer py-1">
       <a routerLink="/layout"><i class="bi bi-box-arrow-left fs-4 text-danger"></i></a>
-      <button class="btn btn-sm btn-primary" (click)="toggleReplyBox()"><i class="bi bi-reply-fill"></i>&nbsp;&nbsp;Reply</button>
+      <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+      <button class="btn btn-sm btn-outline-primary" (click)="toggleReplyBox()"><i class="bi bi-reply-fill"></i>&nbsp;&nbsp;Reply</button>
     </div>
   </div>
 
@@ -55,30 +64,68 @@
     </div>
   </div>
 
-  <!-- Replies Section -->
   <div class="card mt-4">
     <div class="card-header mb-0 py-2 text-white" style="background-color: rgba(7, 0, 61, var(--tw-bg-opacity, 1));">
       <h4 class="m-0">Replies...</h4>
     </div>
     <div class="card-body">
-      <div *ngIf="replays.length === 0" class="text-muted">
-        No replies yet.
-      </div>
+      <div *ngIf="replays.length === 0" class="text-muted">No replies yet.</div>
+    
       <div *ngFor="let reply of replays" class="mb-3">
         <div class="border p-3 rounded shadow-sm">
           <p class="mb-1">
-            <strong style="color: #07003D; font-weight: 500;">Replied by: </strong><span>{{ reply.repliedBy }}</span>
+            <strong>Replied by: </strong><span>{{ reply.repliedBy }}</span>
           </p>
-          <pre class="bg-light p-3 border rounded"><code>{{ reply.content }}</code></pre>
-          <small class="text-muted">{{ reply.createdAt | date:'short' }}</small>
-          
-          <!-- Update and Delete Buttons -->
-          <div class="mt-2">
-            <button class="btn me-2 text-white" style="font-size: 18px; background-color: #1e1375;" (click)="updateReply(reply.id, reply.repliedBy, reply.challengeId)"><i class="bi bi-pencil-square"></i></button>
-            <button class="btn btn-danger" style="font-size: 18px;" (click)="deleteReply(reply.id)"><i class="bi bi-trash"></i></button>
+    
+          <!-- Accepted Reply Symbol -->
+          <span *ngIf="reply.isAccepted" class="text-success fw-bold">✔ Accepted</span>
+    
+          <textarea *ngIf="reply.isEditing" [(ngModel)]="reply.editedText" rows="2" class="form-control"></textarea>
+          <pre *ngIf="!reply.isEditing" class="bg-light p-3 border rounded">{{ reply.content }}</pre>
+    
+          <!-- Action Buttons -->
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Left: Edit & Delete Buttons -->
+            <div *ngIf = 'reply.repliedBy === currentUser'>
+              <button *ngIf="!reply.isEditing" class="btn btn-sm btn-primary me-2" (click)="editReply(reply)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button *ngIf="!reply.isEditing" class="btn btn-sm btn-danger" (click)="deleteReply(reply.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+              <div class="mt-2">
+                <button *ngIf="reply.isEditing" class="btn btn-sm btn-success me-2" (click)="saveEditedReply(reply)">
+                  <i class="bi bi-check-circle"></i>
+                </button>
+                <button *ngIf="reply.isEditing" class="btn btn-sm btn-secondary" (click)="cancelEdit(reply)">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+            </div>
+    
+            <!-- Right: Accept Reply & Reply Button -->
+            <div>
+              <button  
+                class="btn btn-outline-success me-2" (click)="markAsAccepted(reply)">
+                <i class="bi bi-check-lg"></i> Accept
+              </button>
+    
+              <button class="btn btn-outline-primary" (click)="toggleReplyToReply(reply)">
+                <i class="bi bi-reply-fill"></i> 
+              </button>
+            </div>
+          </div>
+    
+          <!-- Reply Box (Only Shown When Replying) -->
+          <div *ngIf="reply.showReplyBox" class="mt-2">
+            <textarea [(ngModel)]="reply.replyText" class="form-control" rows="2" placeholder="Write a reply..."></textarea>
+            <button class="btn btn-sm btn-success mt-2" (click)="submitReplyToReply(reply)">
+              Submit
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
+  
 </div>

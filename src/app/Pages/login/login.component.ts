@@ -29,20 +29,8 @@ export class LoginComponent {
     debugger;
     this.http.post('https://localhost:7103/api/Auth/login', this.logiobj).subscribe((res: any) => {
         if(res.success) {
-          // Store both username and token
-          this.authService.setUsername(this.logiobj.username);
-          
-          // Store the JWT token from the response
-          // The token might be in res.token, res.data.token, or res.accessToken
-          // Adjust the property name based on your API response structure
-          if (res.token) {
-            this.authService.setToken(res.token);
-          } else if (res.data && res.data.token) {
-            this.authService.setToken(res.data.token);
-          } else if (res.accessToken) {
-            this.authService.setToken(res.accessToken);
-          }
-          
+          localStorage.setItem('username', this.logiobj.username);
+          sessionStorage.setItem('token', res.token) // Store the username in local storage
           alert('Login Success');
           this.router.navigateByUrl('dashboard')
         } else {

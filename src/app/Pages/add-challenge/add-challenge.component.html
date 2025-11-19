@@ -1,7 +1,10 @@
-<div class="m-4 container-fluid mx-2">
+<div class="container-fluid">
+  <div class="d-flex p-3 pt-2 pb-2 mb-1" style="background-color: rgba(7, 0, 61, var(--tw-bg-opacity, 1)); color: #fff;">
+    <a class="nav-link fs-5"  routerLink="/layout"><i class="bi bi-card-list"></i>&nbsp;Challenges</a>&nbsp;<span class="pt-1"><i class="bi bi-arrow-left text-white"></i></span>&nbsp;<span> <p class="fs-5 mb-0"><i class="bi bi-card-checklist"></i>&nbsp;Add Challenge</p></span>
+  </div> 
   <div class="card shadow-lg">
     <div class="card-header header-part" style="background-color: rgba(7, 0, 61, 1);">
-      <h2 class="text-white">Challenge</h2>
+      <h2 class="text-white pt-2">Challenge</h2>
     </div>
     <div class="card-body">
       <div class="form-group mb-3">
@@ -21,13 +24,41 @@
           <option value="DevOps">DevOps</option>
           <option value="Developer">Developer</option>
           <option value="Tested Database">Tested Database</option>
+          <option value="other's">other’s</option>
         </select>
       </div>
 
       <div class="form-group mt-4 btn-center">
         <button class="btn btn-primary py-2 px-3" type="submit" (click)="OnSubmit()">Submit</button>
       </div>
+      
+      <div>
+        <!-- File Upload Button -->
+        <label for="fileInput" class="upload-button">
+          <mat-icon>cloud_upload</mat-icon> Upload File
+          <input type="file" id="fileInput" (change)="onFileSelected($event)">
+        </label>
+      
+        <!-- Display Selected File Name -->
+        <p *ngIf="selectedFileName">Selected File: <strong>{{ selectedFileName }}</strong></p>
+      
+        <div class= 'upload-file' style="margin-top: 10px;">
+          <button mat-raised-button color="primary"  (click)="uploadFile()" >
+            Upload  
+          </button>
+        </div>
+      
+        <!-- Show Upload Progress -->
+        <p *ngIf="uploadProgress !== null">Upload Progress: {{ uploadProgress }}%</p>
+      
+        <!-- Show API Response -->
 
+      </div>
+      
+
+     
+      
+      
       
     </div>
   </div>
